@@ -48,11 +48,4 @@ I will remove the dedicated "Contact" page and integrate the Call-To-Action dire
 
 ![Pressure Test Screenshot](./pressure_test_output.png)
 
----
 
-## 4. Manual Checklist
-- [x] Set up accounts for Claude, ChatGPT, Gemini, and Perplexity.
-- [ ] Sketch a physical portfolio sitemap and take a photo.
-- [ ] Create a Claude Project with the provided custom instructions.
-- [ ] Run the pressure-test prompt in Claude and review the output.
-- [ ] Add screenshots/photos to this folder and submit deliverables in your track thread.
