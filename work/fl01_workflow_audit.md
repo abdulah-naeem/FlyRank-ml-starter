@@ -35,7 +35,7 @@
 ---
 
 ## 3. Manual Checklist (To be completed by you)
-- [ ] Enroll in Anthropic Academy "AI Fluency: Framework & Foundations" and complete module 1.
-- [ ] Set up Claude, ChatGPT, and Anthropic Academy accounts.
-- [ ] Create a Claude Project with custom instructions (e.g., "I am an AI grad working as a Machine Learning intern. I prefer concise, code-heavy responses without fluff.").
-- [ ] Take a screenshot of the configured Claude Project to submit alongside this document.
+- [x] Enroll in Anthropic Academy "AI Fluency: Framework & Foundations" and complete module 1.
+- [x] Set up Claude, ChatGPT, and Anthropic Academy accounts.
+- [x] Create a Claude Project with custom instructions (e.g., "I am an AI grad working as a Machine Learning intern. I prefer concise, code-heavy responses without fluff.").
+- [x] Take a screenshot of the configured Claude Project to submit alongside this document.
