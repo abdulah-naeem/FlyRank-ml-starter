@@ -16,6 +16,9 @@
 | **10. Planning project architecture/pipelines** | Collaborate with AI | Useful for whiteboarding; I provide constraints, it provides a draft structure, and we iterate. |
 | **11. Organizing daily task lists/notes** | Fully Automate | AI can take my messy brain-dump notes and instantly convert them into an organized markdown checklist. |
 | **12. Setting up Python environments** | Fully Automate | A simple automated bash/makefile script handles all dependency and virtual environment setups instantly. |
+| **13. Creating presentation slides for weekly sync** | Collaborate with AI | AI helps structure the narrative and bullet points from my raw notes. |
+| **14. Reviewing PRs from peers** | Just me | I need to understand their code changes deeply to ensure system integrity and learn from their approaches. |
+| **15. Updating personal portfolio website** | Delegate to AI with review | AI can quickly generate HTML/CSS updates or new project cards based on my text descriptions. |
 
 ---
 
@@ -34,8 +37,6 @@
 
 ---
 
-## 3. Manual Checklist (To be completed by you)
-- [x] Enroll in Anthropic Academy "AI Fluency: Framework & Foundations" and complete module 1.
-- [x] Set up Claude, ChatGPT, and Anthropic Academy accounts.
-- [x] Create a Claude Project with custom instructions (e.g., "I am an AI grad working as a Machine Learning intern. I prefer concise, code-heavy responses without fluff.").
-- [x] Take a screenshot of the configured Claude Project to submit alongside this document.
+## 3. Evidence of Setup
+
+![Claude Project Screenshot](./claude_project_screenshot.png)
