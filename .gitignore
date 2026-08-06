@@ -34,3 +34,15 @@ __pycache__/
 .venv/
 venv/
 .env
+
+# --- Scratch & temporary build scripts ------------------------------------
+scratch/
+edit_notebook*.py
+work/generate*.py
+
+# --- Generated PDF & Word documents ---------------------------------------
+*.pdf
+*.docx
+work/*.pdf
+work/*.docx
+
