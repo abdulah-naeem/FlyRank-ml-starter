@@ -7,9 +7,8 @@ Follow these steps to build the workflow manually, connect your tools, and captu
 ## Step 1: The Trigger
 Every agent needs to know when to wake up. 
 1. Open n8n and create a new workflow.
-2. Add a **Schedule Trigger** node (so it can run daily).
-3. Add a **Manual Trigger** node (so you can test it on demand).
-4. Connect both triggers to your next node.
+2. Add a **Manual Trigger** node (since your Docker container doesn't run 24/7, a schedule trigger won't work reliably. We'll stick to triggering the scout manually when you need it).
+3. Connect the trigger to your next node.
 
 ## Step 2: The Data Source (RSS)
 We need to fetch the raw news feed.

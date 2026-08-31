@@ -18,3 +18,8 @@
 - **What I built:** I added the `IF` node to filter out articles with a `relevance_score` less than 7.
 - **What broke:** The IF node failed to execute because the LLM occasionally returned conversational text like *"Here is your JSON: { ... }"*, which n8n couldn't parse as a number.
 - **What changed (Deviation from spec):** I had to modify the Groq HTTP request to explicitly include `"response_format": {"type": "json_object"}` in the API call, and update the system prompt to explicitly command it to output strictly JSON with no conversational prefix. This fixed the parsing error and allowed the IF node to confidently block low-relevance fluff pieces.
+
+### Iteration 4: The Scheduling Constraint
+- **What I built:** I originally planned a Schedule Trigger node to run the agent every morning at 8:00 AM, as defined in my spec.
+- **What broke:** The schedule trigger requires the n8n environment to be running 24/7. Since I am hosting n8n via a local Docker container that spins down when I close my laptop, the cron job missed its execution window.
+- **What changed (Deviation from spec):** I removed the Schedule Trigger and replaced it with a simple Manual Trigger. The Scout Agent will now be fired on-demand when the Docker container is active, rather than relying on a background cron scheduler.
