@@ -38,3 +38,27 @@ I have chosen **Vanilla HTML/CSS hosted on Netlify / GitHub Pages**.
 I rejected Next.js because an ML engineer building a static portfolio in React is adding unnecessary technical debt; the maintenance overhead of an NPM ecosystem would distract me from my actual ML engineering goals. I rejected standard Markdown generators (like MkDocs) because they are visually rigid and would compromise the custom visual identity (The Face) I designed last week.
 
 By writing clean, semantic HTML and CSS, I ensure my site remains lightweight and fast. **Can I maintain this?** Yes. Vanilla web technologies from 10 years ago still render perfectly today without any updates, meaning this portfolio will never "break" due to a deprecated framework dependency. **Does it show my work well?** Absolutely. I have full control over CSS Grid for my visual evidence, and I can embed code snippets and demo videos exactly where they serve my argument best. Finally, since my site is purely informational, a backend is strictly **not yet** necessary, allowing me to host it for free indefinitely.
+
+---
+
+# Empty but Live: Deployment Verification & Claude Project Readiness
+
+### 1. Live Deployment Details
+- **Chosen Stack:** Vanilla HTML5 / Modern CSS (100% compliant with Week 3 Identity Kit).
+- **Hosting Platform:** Netlify (via Netlify Drop at `app.netlify.com/drop`).
+- **Live URL:** [https://abdullah-naeem-ml.netlify.app](https://abdullah-naeem-ml.netlify.app)
+- **Second Device Verification:** Reachable and verified via mobile browser (responsive single-column layout).
+- **Source Folder:** `work/portfolio/` containing `index.html`, `styles.css`, `favicon.svg`, and `logo.svg`.
+- **Milestone State:** Displays "Empty but Live · Week 4 Milestone" with active green pulse dot, official monogram (`AN.`), name, title, one-line claim, and Week 5 case study roadmap teasers.
+
+### 2. Visual Proof (Screenshot Deliverable)
+![Empty but Live Desktop Preview](./empty_live_preview.png)
+
+### 3. Claude Project Setup Confirmation
+The following files have been prepared and loaded into the Claude Project knowledge repository:
+- **Identity Kit:** `fl01_identity_kit.md` (Plus Jakarta Sans + Inter typography, Slate `#F8FAFC`/`#0F172A` palette, Sapphire `#2563EB` accent).
+- **Content Map & Sitemap:** `fl01_content_map.md` & `fl01_portfolio_sitemap.md`.
+- **Proof Statement:** `fl01_proof_statement.md`.
+- **Knowledge Bundle:** `claude_project_knowledge_bundle.md` (consolidated style note, prompt instructions, and sitemap for rapid AI context priming).
+- **Case Study Drafts:** `work/` notebooks and technical documentation ready for Week 5 ("Ship the Ugly Version").
+
