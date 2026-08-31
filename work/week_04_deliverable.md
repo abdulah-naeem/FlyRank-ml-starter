@@ -13,9 +13,9 @@
 - **Backend:** None.
 - **Trade-off:** Very fast to write, but customizing the layout to match my specific Week 3 Identity Kit (Plus Jakarta Sans, exact slate color hexes) means fighting the default theme. Custom image galleries can be clunky.
 
-**2. Middle Road: Vanilla HTML/CSS/JS hosted on Netlify**
+**2. Middle Road: Vanilla HTML/CSS/JS hosted on Vercel**
 - **How to build:** Hand-code the HTML structures and apply the CSS variables from my identity kit directly via a single stylesheet.
-- **Host:** Netlify or GitHub Pages (Free).
+- **Host:** Vercel (Free Hobby Tier).
 - **Backend:** None.
 - **Trade-off:** Slower to write the initial page boilerplate than Markdown, but it gives me 100% control over the exact layout, image galleries, and custom typography without having to learn or fight a framework.
 
@@ -33,7 +33,7 @@ I initially considered Option 1, but after pressure testing Option 2 (Vanilla HT
 - *Does it show my work the way it needs to be shown?* Yes, raw HTML easily supports `<iframe>` for demos, `<pre><code>` for code, and CSS Grid for layout galleries without requiring complex plugins.
 
 ### My Decision (The Rationale)
-I have chosen **Vanilla HTML/CSS hosted on Netlify / GitHub Pages**. 
+I have chosen **Vanilla HTML/CSS hosted on Vercel**. 
 
 I rejected Next.js because an ML engineer building a static portfolio in React is adding unnecessary technical debt; the maintenance overhead of an NPM ecosystem would distract me from my actual ML engineering goals. I rejected standard Markdown generators (like MkDocs) because they are visually rigid and would compromise the custom visual identity (The Face) I designed last week.
 
@@ -45,8 +45,8 @@ By writing clean, semantic HTML and CSS, I ensure my site remains lightweight an
 
 ### 1. Live Deployment Details
 - **Chosen Stack:** Vanilla HTML5 / Modern CSS (100% compliant with Week 3 Identity Kit).
-- **Hosting Platform:** Netlify (via Netlify Drop at `app.netlify.com/drop`).
-- **Live URL:** [https://abdullah-naeem-ml.netlify.app](https://abdullah-naeem-ml.netlify.app)
+- **Hosting Platform:** Vercel (via GitHub integration on Hobby Tier).
+- **Live URL:** [https://abdullah-naeem-ml.vercel.app](https://abdullah-naeem-ml.vercel.app)
 - **Second Device Verification:** Reachable and verified via mobile browser (responsive single-column layout).
 - **Source Folder:** `work/portfolio/` containing `index.html`, `styles.css`, `favicon.svg`, and `logo.svg`.
 - **Milestone State:** Displays "Empty but Live · Week 4 Milestone" with active green pulse dot, official monogram (`AN.`), name, title, one-line claim, and Week 5 case study roadmap teasers.

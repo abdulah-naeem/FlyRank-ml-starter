@@ -93,6 +93,7 @@ The One Action: Direct conversion to schedule a technical interview.
 ## 5. Technical Architecture & Hosting Stack
 
 * **Chosen Stack:** Vanilla HTML5 + Modern CSS + Lightweight JS (Strictly Zero-Framework).
-* **Host:** Netlify (Recommended) / GitHub Pages on Free Tier.
+* **Host:** Vercel (Hobby Tier &bull; Edge Network).
 * **Backend:** Strictly **None yet** (Static, instant loading, 100% uptime, zero npm maintenance debt).
 * **Repository:** `github.com/abdulah-naeem/FlyRank-ml-starter`
+
