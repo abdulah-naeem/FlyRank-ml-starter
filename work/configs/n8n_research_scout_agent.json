@@ -1,0 +1,201 @@
+{
+  "name": "News & Research Scout (Agent)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://searchengineland.com/feed",
+        "options": {}
+      },
+      "id": "2",
+      "name": "Fetch News RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        200,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.link }}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "id": "3",
+      "name": "Scrape Full Article",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        400,
+        200
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "extractionValues": {
+          "values": [
+            {
+              "key": "text",
+              "cssSelector": "article, body",
+              "returnValue": "text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4",
+      "name": "Extract HTML Text",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        600,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_GROQ_API_KEY_HERE"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama3-8b-8192\",\n  \"response_format\": {\"type\": \"json_object\"},\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are an AI research scout. Read the provided article text. Score relevance to 'AI in SEO' from 1-10. If relevance >= 7, extract 'problem', 'solution', and 'takeaway'. Output ONLY valid JSON with keys: relevance_score (number), problem (string), solution (string), takeaway (string).\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": {{ JSON.stringify($json.text) }}\n    }\n  ]\n}"
+      },
+      "id": "5",
+      "name": "LLM Insights (Groq)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        800,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ JSON.parse($json.choices[0].message.content).relevance_score }}",
+              "operation": "largerEqual",
+              "value2": 7
+            }
+          ]
+        }
+      },
+      "id": "6",
+      "name": "Filter Relevance >= 7",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nlet report = \"# Daily AI & SEO Research Brief\\n\\n\";\n\nfor (const item of items) {\n  const data = JSON.parse(item.json.choices[0].message.content);\n  report += `### Takeaway: ${data.takeaway}\\n`;\n  report += `- **Problem:** ${data.problem}\\n`;\n  report += `- **Solution:** ${data.solution}\\n\\n`;\n}\n\nreturn [{ json: { report } }];"
+      },
+      "id": "7",
+      "name": "Format Daily Brief",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Fetch News RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch News RSS": {
+      "main": [
+        [
+          {
+            "node": "Scrape Full Article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape Full Article": {
+      "main": [
+        [
+          {
+            "node": "Extract HTML Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract HTML Text": {
+      "main": [
+        [
+          {
+            "node": "LLM Insights (Groq)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Insights (Groq)": {
+      "main": [
+        [
+          {
+            "node": "Filter Relevance >= 7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Relevance >= 7": {
+      "main": [
+        [
+          {
+            "node": "Format Daily Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
