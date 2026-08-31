@@ -1,0 +1,146 @@
+{
+  "name": "Weekly Industry Brief (Groq)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "2e7ed0f7-fcc9-4146-b366-c0604e13443d",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        256,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.feedburner.com/kdnuggets-data-mining-analytics",
+        "options": {}
+      },
+      "id": "215774fa-eb2d-4d09-94b2-3d52f8df59c5",
+      "name": "Fetch ML News",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        464,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nlet articlesText = \"\";\nconst limit = Math.min(items.length, 5);\n\nfor (let i = 0; i < limit; i++) {\n  const item = items[i].json;\n  articlesText += `Title: ${item.title}\\nLink: ${item.link}\\nSummary: ${item.contentSnippet || item.content}\\n\\n`;\n}\n\nconst groqPayload = {\n  model: \"openai/gpt-oss-120b\",\n  messages: [\n    {\n      role: \"system\",\n      content: \"You are a senior ML researcher writing a Weekly Industry Brief. Read the following article summaries and synthesize them into a single, cohesive Markdown newsletter. Group related topics, use bullet points, and highlight the 'so what?' for ML practitioners. Do not just list them; weave them into a brief.\"\n    },\n    {\n      role: \"user\",\n      content: articlesText\n    }\n  ]\n};\n\nreturn [{ json: { articlesText, groqPayload } }];"
+      },
+      "id": "c5d9dbee-085d-4796-be24-56b9dac336de",
+      "name": "Synthesize & Limit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_GROQ_API_KEY_HERE"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.groqPayload }}",
+        "options": {}
+      },
+      "id": "185e2bed-2ef8-455a-8977-0c29d957e604",
+      "name": "Groq LLM (Draft Brief)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        864,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first().json;\nconst markdown = response.choices[0].message.content;\nreturn [{ json: { markdown_brief: markdown } }];"
+      },
+      "id": "290e71b2-fe22-4ef4-ae17-a02f80945497",
+      "name": "Extract Markdown",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1056,
+        208
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Fetch ML News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch ML News": {
+      "main": [
+        [
+          {
+            "node": "Synthesize & Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Synthesize & Limit": {
+      "main": [
+        [
+          {
+            "node": "Groq LLM (Draft Brief)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq LLM (Draft Brief)": {
+      "main": [
+        [
+          {
+            "node": "Extract Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "0002659c-79e3-4492-a484-f3acd64e6ccb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c80fbbdc6b8555a8e255c7befbebd222559c0b62b606827d352820a2cfea6c5b"
+  },
+  "id": "THxwAP2T1DwEDYaYfc3Mr",
+  "tags": []
+}
