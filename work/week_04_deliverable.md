@@ -47,8 +47,8 @@ By writing clean, semantic HTML and CSS, I ensure my site remains lightweight an
 - **Chosen Stack:** Vanilla HTML5 / Modern CSS (100% compliant with Week 3 Identity Kit).
 - **Hosting Platform:** Vercel (via GitHub integration on Hobby Tier).
 - **Live URL:** [https://abdullah-naeem-ml.vercel.app](https://abdullah-naeem-ml.vercel.app)
-- **Second Device Verification:** Reachable and verified via mobile browser (responsive single-column layout).
-- **Source Folder:** `work/portfolio/` containing `index.html`, `styles.css`, `favicon.svg`, and `logo.svg`.
+- **Standalone Repository:** [https://github.com/abdulah-naeem/portfolio](https://github.com/abdulah-naeem/portfolio)
+- **Root Files:** `index.html`, `styles.css`, `favicon.svg`, `logo.svg`, `vercel.json`.
 - **Milestone State:** Displays "Empty but Live · Week 4 Milestone" with active green pulse dot, official monogram (`AN.`), name, title, one-line claim, and Week 5 case study roadmap teasers.
 
 ### 2. Visual Proof (Screenshot Deliverable)
