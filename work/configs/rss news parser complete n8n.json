@@ -1,0 +1,269 @@
+{
+  "name": "My workflow 5",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        0
+      ],
+      "id": "c181b8d4-bac7-440d-a7b8-265c87b8c066",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://searchengineland.com/feed",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -64,
+        0
+      ],
+      "id": "a4848891-9623-4fc5-aec0-b178248c99bc",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "maxItems": 3
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        384,
+        0
+      ],
+      "id": "323c87a4-8d81-4ec7-8c98-5afa4610260d",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.link }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "290033a7-3975-4e64-9682-11ad35764550",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "dc60b13f-c046-4f4e-9543-6bc44402896a",
+              "leftValue": "={{ JSON.parse($json.text).relevance_score }}\n",
+              "rightValue": 7,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "c0ac185d-a4ec-45a1-b066-74b53f242c2a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data.substring(0, 6000) }}\n",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an AI research scout. You will receive raw HTML from an article page. Ignore all HTML tags, navigation, ads, and sidebars. Focus only on the main article content. Score relevance to 'AI in SEO' from 1-10. If relevance >= 7, extract 'problem', 'solution', and 'takeaway'. Output ONLY valid JSON with keys: relevance_score (number), problem (string), solution (string), takeaway (string). No markdown, no explanation.\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        832,
+        0
+      ],
+      "id": "d4b2098e-863b-4f08-bed5-8fa10b6c142a",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        832,
+        224
+      ],
+      "id": "79b3031e-c85f-4b84-98cb-9087ac8b1881",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "GPuqUeXAKTkcVWvR",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "link",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        144,
+        0
+      ],
+      "id": "67d2b173-2003-4095-b8e5-90abeea27705",
+      "name": "Remove Duplicates"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nlet report = \"# Daily AI & SEO Research Brief\\n\\n\";\nreport += `**Date:** ${new Date().toISOString().split('T')[0]}\\n\\n`;\n\nfor (const item of items) {\n  const data = JSON.parse(item.json.text);\n  report += `### Takeaway: ${data.takeaway}\\n`;\n  report += `- **Relevance:** ${data.relevance_score}/10\\n`;\n  report += `- **Problem:** ${data.problem}\\n`;\n  report += `- **Solution:** ${data.solution}\\n\\n`;\n}\n\nreport += `---\\n*Scout processed ${items.length} relevant article(s).*`;\nreturn [{ json: { report } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        -48
+      ],
+      "id": "48df9160-9961-45cb-adcb-f5bd41b98fb1",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "808357c6-ce51-4c53-b448-5462806fb1b6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c80fbbdc6b8555a8e255c7befbebd222559c0b62b606827d352820a2cfea6c5b"
+  },
+  "id": "vOChjgCTr6u6USJD8PiE5",
+  "tags": []
+}

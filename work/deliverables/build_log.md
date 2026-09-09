@@ -1,8 +1,8 @@
 # Agent Build Log: News & Research Scout
 
-**Date:** [Current Date]
+**Date:** September 9, 2026
 **Agent Scope:** News & Research Scout (AI in SEO)
-**Platform:** n8n
+**Platform:** n8n (self-hosted via Docker)
 
 ### Iteration 1: The Initial MVP
 - **What I built:** I started by connecting the KDnuggets RSS feed directly to a Groq LLM node.
@@ -23,3 +23,23 @@
 - **What I built:** I originally planned a Schedule Trigger node to run the agent every morning at 8:00 AM, as defined in my spec.
 - **What broke:** The schedule trigger requires the n8n environment to be running 24/7. Since I am hosting n8n via a local Docker container that spins down when I close my laptop, the cron job missed its execution window.
 - **What changed (Deviation from spec):** I removed the Schedule Trigger and replaced it with a simple Manual Trigger. The Scout Agent will now be fired on-demand when the Docker container is active, rather than relying on a background cron scheduler.
+
+### Iteration 5: The HTML Extract Trap
+- **What I built:** I added an HTML Extract node with the CSS selector `article, .entry-content, .post-content, main` to clean scraped pages before sending to the LLM.
+- **What broke:** All 3 articles returned identical text — "The big winners and losers in U.S. website traffic over the past year" — even though the RSS feed had 3 different links. The CSS selector was matching a **shared featured/trending article widget** that SearchEngineLand renders on every page, not the actual article body.
+- **What changed:** I removed the HTML Extract node entirely. Instead, I pass the raw HTML directly to the LLM with `substring(0, 6000)` to truncate it, and updated the system prompt to instruct the LLM to ignore HTML tags, navigation, and sidebars. The LLM is smart enough to parse through the noise and find the real article content.
+
+### Iteration 6: Groq Token Limit
+- **What I built:** I connected the Basic LLM Chain node to a Groq Chat Model using `openai/gpt-oss-20b`.
+- **What broke:** Groq returned `Request too large` — the free tier has an 8,000 TPM (tokens per minute) limit, and the full article HTML was 14,786 tokens.
+- **What changed:** I added `.substring(0, 6000)` to the prompt expression to cap input at ~6,000 characters (~1,500 tokens). This keeps each request well under the 8,000 TPM limit while still providing enough article text for accurate scoring.
+
+### Iteration 7: Model Selection for Token Efficiency
+- **What I built:** I initially selected `qwen/qwen3.6-27b` as the LLM model in Groq.
+- **What broke:** Nothing broke, but I realized Qwen 3.x models have **thinking mode enabled by default** — they generate hidden `<think>` reasoning tokens that still count against the Groq rate limit. For a simple "score and extract JSON" task, this was unnecessary overhead.
+- **What changed:** I switched to `openai/gpt-oss-20b` — a 20B model with no hidden thinking tokens, keeping token usage minimal and staying within the free tier.
+
+### Iteration 8: The Working Agent ✅
+- **What I built:** The final 8-node pipeline: `Manual Trigger → RSS Read → Remove Duplicates → Limit (3) → HTTP Request (scrape) → Basic LLM Chain (Groq gpt-oss-20b) → IF (relevance ≥ 7) → Code (format brief)`.
+- **What worked:** The agent ran end-to-end in a single click. It fetched 10 articles from SearchEngineLand, deduplicated and limited to 3, scraped each page, sent truncated HTML to the LLM, received JSON scores (two scored 2/10 → filtered out, one scored 9/10 → kept), and compiled a clean Markdown daily brief with the surviving article's problem, solution, and actionable takeaway.
+- **Result:** One relevant article about "AI visibility beyond SEO" passed the filter. The brief was generated successfully.
