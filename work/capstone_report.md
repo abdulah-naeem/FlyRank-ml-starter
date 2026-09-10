@@ -3,7 +3,7 @@
 - **Author:** Abdullah Naeem
 - **Lane:** Machine Learning Engineer
 - **Repo:** FlyRank-ml-starter
-- **Date:** September 2026
+- **Date:** September 10, 2026
 
 ## 0. Abstract
 
