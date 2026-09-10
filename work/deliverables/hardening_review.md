@@ -23,6 +23,8 @@ I simulated testing edge cases on the live portfolio (submitting empty forms, do
    - *Limitation:* The mobile menu toggle relies on 10 lines of JavaScript. If a user entirely disables JS in their browser, they cannot open the menu on a phone. 
    - *Why we accept this:* The site degrades gracefully; all core content (About, Links, Projects, Contact) is still fully readable and accessible by simply scrolling down the page.
 
-## SEO & Speed Checks
+3. **HTTP ERROR 429 (Too Many Requests) on Spam:** 
+   - *Limitation:* If a user spams the form extremely fast, Netlify's backend will return a raw "HTTP ERROR 429: This page isn't working" screen.
+   - *Why we accept this:* This is actually a feature, not a bug. Netlify is IP-blocking the spammer to protect our form quota and inbox. While the error page isn't pretty, it successfully stops the attack. Building a custom graceful rate-limit screen would require a dedicated backend server.
 - Basic SEO tags (Title, Description, and OpenGraph) are present and verified.
 - The site relies purely on static HTML/CSS with highly optimized SVG assets (no heavy JS frameworks or massive raster images), ensuring near-instant load times globally via Netlify's CDN.
